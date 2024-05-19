@@ -38,8 +38,6 @@ public class CustomDataSource implements DataSource {
 
     public static CustomDataSource getInstance() {
 
-
-
         Properties properties = new Properties();
         try {
             // Загрузка файла конфигурации из ресурсов
