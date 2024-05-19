@@ -13,14 +13,22 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
+
 public class SimpleJDBCRepository {
 
     private Connection connection = null;
     private PreparedStatement ps = null;
     private Statement st = null;
+
     private CustomDataSource dataSource ;
 
+
+    public SimpleJDBCRepository(CustomDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+    public SimpleJDBCRepository() {
+        this.dataSource = CustomDataSource.getInstance();
+    }
 
     private static final String createUserSQL = "INSERT INTO myfirstdb.public.myusers (firstName, lastName, age) VALUES (?, ?, ?)";
     private static final String updateUserSQL = "UPDATE myfirstdb.public.myusers SET firstName=?, lastName=?, age=? WHERE id=?";
@@ -28,9 +36,7 @@ public class SimpleJDBCRepository {
     private static final String findUserByIdSQL = "SELECT * FROM myfirstdb.public.myusers WHERE id=?";
     private static final String findUserByNameSQL = "SELECT * FROM myfirstdb.public.myusers WHERE firstName || ' ' || lastName = ?";
     private static final String findAllUserSQL = "SELECT * FROM myfirstdb.public.myusers";
-    public SimpleJDBCRepository(CustomDataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+
 
     public Long createUser(User user) {
         try (Connection connection = dataSource.getConnection();
