@@ -36,30 +36,8 @@ public class SimpleJDBCRepository {
 
 
     public Long createUser() {
-//        try {
-//            connection = dataSource.getConnection();
-//            ps = connection.prepareStatement(createUserSQL);
-//            ps.setString(1,user.getFirstName());
-//            ps.setString(2,user.getLastName());
-//            ps.setInt(3,user.getAge());
-//            ps.executeUpdate();
-//            ResultSet rs = ps.getGeneratedKeys();
-//            if (rs.next()) {
-//                return rs.getLong(1);
-//            }
-//            throw new SQLException("Creating user failed, no ID obtained.");
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }finally {
-//            try {
-//                connection.close();
-//                ps.close();
-//                st.close();
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-return null;
+
+        return null;
     }
 
     public User findUserById(Long userId) {
@@ -121,30 +99,7 @@ return null;
     }
 
     public User updateUser() {
-//        try (Connection connection = dataSource.getConnection();
-//             PreparedStatement ps = connection.prepareStatement(updateUserSQL)) {
-//            ps.setString(1, user.getFirstName());
-//            ps.setString(2, user.getLastName());
-//            ps.setInt(3, user.getAge());
-//            ps.setLong(4, user.getId());
-//            ps.executeUpdate();
-//
-//
-//            ResultSet rs = ps.executeQuery();
-//            if (rs.next()) {
-//                long id = rs.getLong("id");
-//                String firstName = rs.getString("firstName");
-//                String lastName = rs.getString("lastName");
-//                int age = rs.getInt("age");
-//
-//                return new User(id, firstName, lastName, age);
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
+
         return  null;
     }
 
