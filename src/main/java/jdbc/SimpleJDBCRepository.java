@@ -19,7 +19,7 @@ public class SimpleJDBCRepository {
     private Connection connection = null;
     private PreparedStatement ps = null;
     private Statement st = null;
-    CustomDataSource dataSource;
+    private CustomDataSource dataSource ;
 
 
     private static final String createUserSQL = "INSERT INTO myfirstdb.public.myusers (firstName, lastName, age) VALUES (?, ?, ?)";
