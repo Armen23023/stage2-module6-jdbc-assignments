@@ -22,22 +22,32 @@ public class SimpleJDBCRepository {
     CustomDataSource dataSource;
 
 
+    private static final String createUserSQL = "INSERT INTO myfirstdb.public.myusers (firstName, lastName, age) VALUES (?, ?, ?)";
+    private static final String updateUserSQL = "UPDATE myfirstdb.public.myusers SET firstName=?, lastName=?, age=? WHERE id=?";
+    private static final String deleteUser = "DELETE FROM myfirstdb.public.myusers WHERE id=?";
+    private static final String findUserByIdSQL = "SELECT * FROM myfirstdb.public.myusers WHERE id=?";
+    private static final String findUserByNameSQL = "SELECT * FROM myfirstdb.public.myusers WHERE firstName || ' ' || lastName = ?";
+    private static final String findAllUserSQL = "SELECT * FROM myfirstdb.public.myusers";
     public SimpleJDBCRepository(CustomDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    private static final String createUserSQL = "INSERT INTO myfirstdb.public.myusers (firstName, lastName, age) VALUES (?, ?, ?)";
-    private static final String updateUserSQL = "UPDATE myfirstdb.public.myusers SET firstName=?, lastName=?, age=? WHERE id=?";
-    private static final String deleteUser = "DELETE FROM myfirstdb.public.myusers WHERE id = ? ";
-    private static final String findUserByIdSQL = "SELECT * from myfirstdb.public.myusers WHERE id =?";
-    private static final String findUserByNameSQL = "SELECT * from myfirstdb.public.myusers WHERE firstname =?";
-    private static final String findAllUserSQL = "SELECT * from myfirstdb.public.myusers";
-
-
-
-    public Long createUser() {
-
-        return null;
+    public Long createUser(User user) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(createUserSQL, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setInt(3, user.getAge());
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            throw new SQLException("Creating user failed, no ID obtained.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public User findUserById(Long userId) {
@@ -50,7 +60,7 @@ public class SimpleJDBCRepository {
                 String firstName = rs.getString("firstName");
                 String lastName = rs.getString("lastName");
                 int age = rs.getInt("age");
-
+                // Создание объекта User с использованием полученных данных из ResultSet
                 return new User(id, firstName, lastName, age);
             }
             return null;
@@ -77,8 +87,8 @@ public class SimpleJDBCRepository {
             e.printStackTrace();
             return null;
         }
-
     }
+
 
     public List<User> findAllUser() {
         List<User> users = new ArrayList<>();
@@ -98,12 +108,20 @@ public class SimpleJDBCRepository {
         return users;
     }
 
-    public User updateUser() {
-
-        return  null;
+    public void updateUser(User user) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(updateUserSQL)) {
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setInt(3, user.getAge());
+            ps.setLong(4, user.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void deleteUser(Long userId) {
+    public void deleteUser(Long userId) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(deleteUser)) {
             ps.setLong(1, userId);

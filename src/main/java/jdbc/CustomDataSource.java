@@ -38,27 +38,34 @@ public class CustomDataSource implements DataSource {
 
     public static CustomDataSource getInstance() {
 
-        Properties properties = new Properties();
 
+
+        Properties properties = new Properties();
         try {
+            // Загрузка файла конфигурации из ресурсов
             InputStream input = CustomDataSource.class.getClassLoader().getResourceAsStream("app.properties");
             properties.load(input);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to load configuration file", e);
         }
-
         String driver = properties.getProperty("postgres.driver");
         String url = properties.getProperty("postgres.url");
         String name = properties.getProperty("postgres.name");
         String password = properties.getProperty("postgres.password");
 
 
-        if (instance==null){
+        if (instance == null) {
             synchronized (CustomDataSource.class) {
-                instance = new CustomDataSource(driver,url,name,password);
+                if (instance == null) {
+                    instance = new CustomDataSource(
+                            driver,
+                            url,
+                            name,
+                            password
+                    );
+                }
             }
         }
-
         return instance;
     }
 
