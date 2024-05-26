@@ -21,6 +21,7 @@ public class SimpleJDBCRepository {
     private Statement st = null;
 
     private CustomDataSource dataSource ;
+    CustomConnector connector;
 
 
     public SimpleJDBCRepository(CustomDataSource dataSource) {

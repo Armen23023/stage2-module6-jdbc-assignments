@@ -69,7 +69,7 @@ public class CustomDataSource implements DataSource {
 
     @Override
     public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url,name,password);
+        return new CustomConnector().getConnection(url,name,password);
     }
 
     @Override
